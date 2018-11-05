@@ -1,5 +1,6 @@
 appConfig=require('./app.config');
 const mongoose=require("mongoose");
+mongoose.Promise = global.Promise;
 module.exports.connect = () => {
     mongoose.Promise = global.Promise;
     return new Promise((resolve, reject) => {

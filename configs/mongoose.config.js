@@ -1,6 +1,11 @@
-appConfig=require('./app.config');
-const mongoose=require("mongoose");
-mongoose.Promise = global.Promise;
+
+const mongoose = require("mongoose"),
+    pathHelper = require("../helpers/path.helper"),
+    appConfig = require('./app.config');
+module.exports.loadModels = () => {
+    let modelPaths = pathHelper.getGlobbedPaths(appConfig.file.models);
+    modelPaths.forEach((modelPath) => require(path.resolve(modelPath)));
+};
 module.exports.connect = () => {
     mongoose.Promise = global.Promise;
     return new Promise((resolve, reject) => {
@@ -8,7 +13,7 @@ module.exports.connect = () => {
             console.log("connected");
             resolve(db);
         }).catch((err) => {
-            console.log("err"+err);
+            console.log("err" + err);
             reject(err);
         });
     });

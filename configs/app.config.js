@@ -14,4 +14,11 @@ module.exports = {
         services: 'services/*.js'
     },
     root: "http://localhost:3000",
+    accessToken: {
+        expiresIn: 1440 // minutes = 1 day
+    },
+    encryption: {
+        password: 'vs34X?T7BDj7-PUhYCq5w%w',
+        salt: 'B5#9p5WcEPcZSJeSzFm&7Cs'
+    }
 }

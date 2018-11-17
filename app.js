@@ -3,7 +3,6 @@ const
     chalk = require('chalk'),
     mongooseConfig = require('./configs/mongoose.config'),
     expressConfig = require('./configs/express.config');
-
 mongooseConfig.loadModels();
 module.exports.init = () => {//es6
     return new Promise((resolve, reject) => {

@@ -1,9 +1,11 @@
 
 const mongoose = require("mongoose"),
     pathHelper = require("../helpers/path.helper"),
+    path = require('path'),
     appConfig = require('./app.config');
 module.exports.loadModels = () => {
     let modelPaths = pathHelper.getGlobbedPaths(appConfig.file.models);
+    console.log("modelPaths" + modelPaths)
     modelPaths.forEach((modelPath) => require(path.resolve(modelPath)));
 };
 module.exports.connect = () => {

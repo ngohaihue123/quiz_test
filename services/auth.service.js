@@ -1,48 +1,56 @@
 const encryptionHelper = require("../helpers/encryption.helper"),
-    dateTimeHelper = require("../helpers/date-time.helper");
+    dateTimeHelper = require("../helpers/date-time.helper"),
+    appConfig = require('../configs/app.config'),
+    User = require('mongoose').model('User'),
+    Manager = require('mongoose').model('Manager');
 
-module.exports.generateProviderAccessToken = (userId, accessType) => {
+// module.exports.generateProviderAccessToken = (userId, accessType) => {
+//     let token = JSON.stringify({
+//         userId: userId,
+//         access: accessType,
+//         expiredTime: dateTimeHelper.addMinuteFromNow(appConfig.providerToken.expiresIn)
+//     });
+
+//     return encryptionHelper.encrypt(token);
+// }
+module.exports.generateCustomerAccessToken = (customerId) => {
     let token = JSON.stringify({
-        userId: userId,
-        access: accessType,
-        expiredTime: dateTimeHelper.addMinuteFromNow(appConfig.providerToken.expiresIn)
+        id: customerId,
+        expiredTime: dateTimeHelper.addMinuteFromNow(appConfig.accessToken.expiresIn)
     });
-
     return encryptionHelper.encrypt(token);
 }
-
-module.exports.login = (username, password) => {
-    type = 1;
+module.exports.login = (username, password, type) => {
+    console.log(username, password);
     return new Promise((resolve, reject) => {
         let query = {
-            username: username,
+            name: username,
             password: password
         };
         if (!type) {
             User.findOne(query)
-                .populate('currency')
-                .exec((err, provider) => {
-                    if (provider && provider.isActive) {
-                        let access = 'auth';
-                        let token = this.generateProviderAccessToken(provider._id, access);
+                .exec((err, user) => {
+                    if (user && user.isActive) {
+                        let token = this.generateCustomerAccessToken(user._id);
+                        let access = "user";
                         var p = {
-                            username: provider.username,
-                            name: provider.name,
-                            email: provider.email,
+                            username: user.username,
+                            name: user.name,
+                            email: user.email,
                             accessToken: token,
                         };
 
-                        provider.tokens.push({
+                        user.tokens.push({
                             access,
                             token
                         });
 
-                        provider.save().then(() => resolve(p));
+                        user.save().then(() => resolve(p));
 
                     } else {
                         resolve(false);
                     }
-                }).catch(err => reject(err));
+                })
         } else {
             Manager.findOne(query).then(m => {
                 if (m) {

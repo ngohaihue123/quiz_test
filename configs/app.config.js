@@ -20,5 +20,6 @@ module.exports = {
     encryption: {
         password: 'vs34X?T7BDj7-PUhYCq5w%w',
         salt: 'B5#9p5WcEPcZSJeSzFm&7Cs'
-    }
+    },
+    stage: 'dev',
 }

@@ -13,31 +13,30 @@ const encryptionHelper = require("../helpers/encryption.helper"),
 
 //     return encryptionHelper.encrypt(token);
 // }
-module.exports.generateCustomerAccessToken = (customerId) => {
+module.exports.generateUserAccessToken = (customerId) => {
     let token = JSON.stringify({
         id: customerId,
         expiredTime: dateTimeHelper.addMinuteFromNow(appConfig.accessToken.expiresIn)
     });
     return encryptionHelper.encrypt(token);
 }
-module.exports.login = (username, password, type) => {
-    console.log(username, password);
+module.exports.login = (gmail, password, type) => {
+    console.log(gmail, password);
     return new Promise((resolve, reject) => {
         let query = {
-            name: username,
+            gmail: gmail,
             password: password
-        };
-        if (!type) {
+        }; // mở chrom t với
+        if (type == "user") {
             User.findOne(query)
                 .exec((err, user) => {
                     if (user && user.isActive) {
-                        let token = this.generateCustomerAccessToken(user._id);
+                        let token = this.generateUserAccessToken(user._id);
                         let access = "user";
                         var p = {
-                            username: user.username,
                             name: user.name,
-                            email: user.email,
-                            accessToken: token,
+                            gmail: user.gmail,
+                            accessToken: token
                         };
 
                         user.tokens.push({

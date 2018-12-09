@@ -18,11 +18,12 @@ module.exports.initViewEngine = (app) => {
 
 module.exports.initStatic = (app) => {
     app.use(logger('dev'));
-    // app.use(bodyParser.json({ limit: 5120000, type: 'application/json' }));
+    app.use(bodyParser.json({ limit: 5120000, type: 'application/json' }));
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(cookieParser());
     app.use(busboy());
-    app.use(bodyParser.json())
+    // app.use(bodyParser.json())
+    app.use("/public", express.static(path.join(__dirname, '../public')));
 }
 
 module.exports.initRoutes = (app) => {

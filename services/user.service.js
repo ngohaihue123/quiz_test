@@ -1,6 +1,7 @@
 const User = require('mongoose').model('User'),
     contants = require('../static/constants'),
     MessageConstants = contants.MessageConstants;
+_ = require("lodash");
 
 class UserService {
     add(item) {
@@ -12,7 +13,7 @@ class UserService {
                 password: item.password,
                 class: item.class,
                 school: item.scholl,
-                dateCreate: new Date(),
+                dateCreate: dateCreate
             });
             user.save().then(() => resolve({
                 success: true,
@@ -22,7 +23,7 @@ class UserService {
     };
     update(item) {
         return new Promise((resolve) => {
-            User.findById(item_id).then(user => {
+            User.findById(item._id).then(user => {
                 if (user) {
                     user.name = item.name;
                     user.gmail = item.gmail;
@@ -37,15 +38,14 @@ class UserService {
                 } else {
                     resolve({ success: false });
                 }
-
-
             }).catch(err => resolve({ success: false, message: err }));
         });
     };
-    getAll() {
+    getAllByClass(criteria, studentClass) {
         return new Promise((resolve) => {
             let query = {
-                isActive: false,
+                isActive: true,
+                class: studentClass
             };
             User.find(query).select({
                 _id: 1,
@@ -54,7 +54,27 @@ class UserService {
                 class: 1,
                 scholl: 1,
 
-            }).then((result) => resolve({ success: true, data: result }))
+            }).then((students) => {
+                let results = [];
+                if (!criteria.searchText) {
+                    results = students;
+                } else { }
+                let sortedResult = _.sortBy(results, x => x.name);
+                let selectedItems = _.chain(sortedResult)
+                    .drop(criteria.itemPerPage * (criteria.currentPage - 1))
+                    .take(criteria.itemPerPage)
+                    .value();
+
+                criteria.totalPage = Math.ceil(sortedResult.length / criteria.itemPerPage);
+                resolve({
+                    success: true,
+                    data: {
+                        criteria: criteria,
+                        students: selectedItems
+                    }
+                });
+
+            })
                 .catch((err) => resolve({
                     success: false,
                     message: err
@@ -72,5 +92,19 @@ class UserService {
             }).catch(err => resolve({ success: false, message: err }));
         });
     };
+    deleteById(id) {
+        return new Promise((resolve) => {
+            User.find(id).then(user => {
+                if (user) {
+                    user.isActive = false;
+                    user.save().then(() => {
+                        resolve({ success: true, message: MessageConstants.DeleteSuccessfully });
+                    }).catch((err) => resolve({ success: false, message: err }))
+                } else {
+                    resolve({ success: false })
+                }
+            }).catch(err => resolve({ success: false, message: err }))
+        })
+    }
 }
 module.exports = new UserService;

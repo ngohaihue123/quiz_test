@@ -3,5 +3,6 @@ const router = require('express').Router(),
 router.post('/add', testController.add);
 router.get('/allTest', testController.get);
 router.get('/', testController.getById)
+router.put("/update", testController.updateTest);
 
 module.exports = router

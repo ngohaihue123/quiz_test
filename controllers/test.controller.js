@@ -22,5 +22,7 @@ module.exports.getById = (req, res, next) => {
         .catch((err) => next(err));
 }
 module.exports.updateTest = (req, res, next) => {
-
+    testService.update(req.body)
+        .then(rs => res.json(rs))
+        .catch((err) => next(err));
 }

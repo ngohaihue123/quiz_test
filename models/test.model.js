@@ -1,12 +1,16 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 const testSchema = new Schema({
-    tile: String,
-    teacher: { type: Schema.Types.ObjectId, ref: "Manager" },
+    title: String,
+    // teacher: { type: Schema.Types.ObjectId, ref: "Manager" },
     time: Number,
     dateCreate: { type: Date, default: new Date() },
-    isActive: { type: Boolean, default: true },
+    isActived: { type: Boolean, default: true },
+    isDeleted: { type: Boolean, default: false },
     fileTest: String,
+    answer: [],
+    class: Number,
+    numberQuesttion: Number
 
 }, {
         colection: "test",

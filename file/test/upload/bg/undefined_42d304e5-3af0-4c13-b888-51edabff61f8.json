@@ -1,0 +1,40 @@
+[
+   [
+      "Thu Dec 13 2018 10:22:05 GMT+0700 (+07)",
+      [
+         {
+            "billValue": 10000,
+            "point": 0,
+            "_id": "5c11d05da6ca801754e1be18",
+            "currentLevel": 0,
+            "earntAt": "2018-12-13T03:22:05.463Z"
+         },
+         {
+            "billValue": 10000,
+            "point": 0,
+            "_id": "5c11d05da6ca801754e1be19",
+            "currentLevel": 0,
+            "earntAt": "2018-12-13T03:22:05.463Z"
+         }
+      ]
+   ],
+   [
+      "Thu Dec 13 2018 10:22:37 GMT+0700 (+07)",
+      [
+         {
+            "billValue": 10000,
+            "point": 0,
+            "_id": "5c11d07da6ca801754e1be1b",
+            "currentLevel": 0,
+            "earntAt": "2018-12-13T03:22:37.786Z"
+         },
+         {
+            "billValue": 10000,
+            "point": 0,
+            "_id": "5c11d07da6ca801754e1be1c",
+            "currentLevel": 0,
+            "earntAt": "2018-12-13T03:22:37.786Z"
+         }
+      ]
+   ]
+]

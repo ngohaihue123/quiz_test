@@ -15,7 +15,7 @@ module.exports.getAllByClass = (req, res, next) => {
         itemPerPage: parseInt(req.query.itemPerPage),
         currentPage: parseInt(req.query.currentPage)
     };
-    studentClass = req.query.class
+    studentClass = req.query.class;
     userService.getAllByClass(criteria, studentClass)
         .then(rs => res.json(rs))
         .catch((err) => next(err));

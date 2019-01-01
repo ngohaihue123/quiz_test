@@ -18,6 +18,10 @@ module.exports = [
     {
         path: '/file',
         router: 'routes/file.route'
+    },
+    {
+        path: '/studentTest',
+        router: 'routes/student_test.route'
     }
 
 ]

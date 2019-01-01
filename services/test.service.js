@@ -13,8 +13,7 @@ class TestService {
                 fileTest: test.fileTest,
                 answer: test.answer,
                 class: test.class,
-                numberQuesttion: test.numberQuesttion
-
+                numberQuestion: test.numberQuestion
             });
             testModel.save().then(() => resolve({
                 success: true,
@@ -30,7 +29,8 @@ class TestService {
                     test.answer = item.answer;
                     test.fileTest = item.fileTest;
                     test.studentClass = item.studentClass;
-                    test.numberQuesttion = test.numberQuesttion;
+                    test.numberQuestion = item.numberQuestion;
+                    test.time = item.time;
                     test.save().then(() => {
                         resolve({
                             success: true,
@@ -43,47 +43,7 @@ class TestService {
             }).catch(err => resolve({ success: false, message: err }));
         });
     };
-    getAllByClass(criteria, studentClass) {
-        return new Promise((resolve) => {
-            let query = {
-                isActive: true,
-                class: studentClass
-            };
-            User.find(query).select({
-                _id: 1,
-                name: 1,
-                gmail: 1,
-                class: 1,
-                scholl: 1,
 
-            }).then((students) => {
-                let results = [];
-                if (!criteria.searchText) {
-                    results = students;
-                } else { }
-                let sortedResult = _.sortBy(results, x => x.name);
-                let selectedItems = _.chain(sortedResult)
-                    .drop(criteria.itemPerPage * (criteria.currentPage - 1))
-                    .take(criteria.itemPerPage)
-                    .value();
-
-                criteria.totalPage = Math.ceil(sortedResult.length / criteria.itemPerPage);
-                resolve({
-                    success: true,
-                    data: {
-                        criteria: criteria,
-                        students: selectedItems
-                    }
-                });
-
-            })
-                .catch((err) => resolve({
-                    success: false,
-                    message: err
-                }));
-        })
-
-    }
     deleteById(id) {
         return new Promise((resolve) => {
             Test.find(id).then(test => {
@@ -99,6 +59,48 @@ class TestService {
         })
     };
 
+    getAllTestByStudentClass(criteria, studentClass) {
+        return new Promise((resolve) => {
+            let query = {
+                isDeleted: false,
+                class: studentClass
+            };
+            Test.find(query).select({
+                _id: 1,
+                title: 1,
+                fileTest: 1,
+                numberQuestion: 1,
+                time: 1,
+                answer: 1,
+                dateCreate: 1,
+
+            }).then((tests) => {
+                let results = [];
+                if (!criteria.searchText) {
+                    results = tests;
+                } else { }
+                let sortedResult = _.sortBy(results, x => -x.dateCreate);
+                let selectedItems = _.chain(sortedResult)
+                    .drop(criteria.itemPerPage * (criteria.currentPage - 1))
+                    .take(criteria.itemPerPage)
+                    .value();
+
+                criteria.totalPage = Math.ceil(sortedResult.length / criteria.itemPerPage);
+                resolve({
+                    success: true,
+                    data: {
+                        criteria: criteria,
+                        tests: selectedItems
+                    }
+                });
+
+            })
+                .catch((err) => resolve({
+                    success: false,
+                    message: err
+                }));
+        })
+    }
     getAllByTeacherIdAndClass(criteria, studentClass) {
         return new Promise((resolve) => {
             let query = {
@@ -117,7 +119,7 @@ class TestService {
                 if (!criteria.searchText) {
                     results = tests;
                 } else { }
-                let sortedResult = _.sortBy(results, x => x.dateCreate);
+                let sortedResult = _.sortBy(results, x => -x.dateCreate);
                 let selectedItems = _.chain(sortedResult)
                     .drop(criteria.itemPerPage * (criteria.currentPage - 1))
                     .take(criteria.itemPerPage)

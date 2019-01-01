@@ -36,6 +36,8 @@ module.exports.login = (gmail, password, type) => {
                         var p = {
                             name: user.name,
                             gmail: user.gmail,
+                            class: user.class,
+                            idStudent: user._id,
                             accessToken: token
                         };
 

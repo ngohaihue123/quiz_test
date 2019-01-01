@@ -3,6 +3,7 @@ const
     chalk = require('chalk'),
     mongooseConfig = require('./configs/mongoose.config'),
     expressConfig = require('./configs/express.config');
+global.__basedir = __dirname;
 
 
 mongooseConfig.loadModels();

@@ -10,7 +10,7 @@ const testSchema = new Schema({
     fileTest: String,
     answer: [],
     class: Number,
-    numberQuesttion: Number
+    numberQuestion: Number
 
 }, {
         colection: "test",

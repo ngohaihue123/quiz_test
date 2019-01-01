@@ -2,17 +2,8 @@ const encryptionHelper = require("../helpers/encryption.helper"),
     dateTimeHelper = require("../helpers/date-time.helper"),
     appConfig = require('../configs/app.config'),
     User = require('mongoose').model('User'),
-    Manager = require('mongoose').model('Manager');
+    Teacher = require('mongoose').model('Teacher');
 
-// module.exports.generateProviderAccessToken = (userId, accessType) => {
-//     let token = JSON.stringify({
-//         userId: userId,
-//         access: accessType,
-//         expiredTime: dateTimeHelper.addMinuteFromNow(appConfig.providerToken.expiresIn)
-//     });
-
-//     return encryptionHelper.encrypt(token);
-// }
 module.exports.generateUserAccessToken = (customerId) => {
     let token = JSON.stringify({
         id: customerId,
@@ -21,12 +12,11 @@ module.exports.generateUserAccessToken = (customerId) => {
     return encryptionHelper.encrypt(token);
 }
 module.exports.login = (gmail, password, type) => {
-    console.log(gmail, password);
     return new Promise((resolve, reject) => {
         let query = {
             gmail: gmail,
             password: password
-        }; // mở chrom t với
+        };
         if (type == "user") {
             User.findOne(query)
                 .exec((err, user) => {
@@ -53,15 +43,19 @@ module.exports.login = (gmail, password, type) => {
                     }
                 })
         } else {
-            Manager.findOne(query).then(m => {
+            Teacher.findOne(query).then(m => {
                 if (m) {
-                    let accessToken = this.generateManagerAccessToken(m._id, m.role);
+                    let accessToken = this.generateUserAccessToken(m._id);
+                    let access = "teacher"
                     var p = {
-                        username: m.username,
-                        email: m.email,
-                        role: m.role != undefined ? m.role : RoleType.Contributor,
+                        idTeacher: m._id,
+                        gmail: m.username,
                         accessToken: accessToken
                     };
+                    m.tokens.push({
+                        access,
+                        accessToken
+                    })
 
                     resolve(p)
 
